@@ -1,0 +1,2957 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Noh Gayeon Portfolio" />
+  <meta name="theme-color" content="#f4f2ed" />
+  <title>Noh Gayeon Portfolio</title>
+
+  <!-- Korean readability: Pretendard. Falls back cleanly when offline. -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+  <style>
+    :root{
+      --bg:#f4f2ed;
+      --surface:#ffffff;
+      --ink:#151515;
+      --muted:#6d6a65;
+      --line:rgba(21,21,21,.13);
+      --accent:#ff5a36;
+      --accent-soft:#ffe4dc;
+      --max:1440px;
+      --pad:clamp(20px,4vw,64px);
+      --radius:24px;
+      --shadow:0 18px 60px rgba(21,21,21,.07);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:68px}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--ink);
+      font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      line-height:1.55;
+      -webkit-font-smoothing:antialiased;
+    }
+    body.modal-open{overflow:hidden}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    img{display:block;width:100%}
+    ::selection{background:var(--accent);color:white}
+
+    .wrap{width:min(100%,var(--max));margin:auto;padding-inline:var(--pad)}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:9px;
+      font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    }
+    .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent)}
+    .section{padding:clamp(86px,11vw,160px) 0;border-top:1px solid var(--line)}
+    .section-head{
+      display:grid;grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);
+      gap:40px;align-items:end;margin-bottom:clamp(40px,6vw,82px)
+    }
+    .section-title{
+      margin:12px 0 0;
+      font-size:clamp(42px,6vw,88px);
+      line-height:.96;letter-spacing:-.055em;font-weight:650
+    }
+    .section-desc{margin:0;color:var(--muted);font-size:clamp(15px,1.3vw,19px);max-width:540px}
+
+    /* NAV */
+    .nav{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      background:rgba(244,242,237,.78);
+      border-bottom:1px solid rgba(21,21,21,.08)
+    }
+    .nav-inner{height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{font-weight:800;letter-spacing:-.04em;font-size:20px}
+    .brand .dot{color:var(--accent)}
+    .nav-links{display:flex;align-items:center;gap:30px;font-size:14px;font-weight:600}
+    .nav-links a{position:relative}
+    .nav-links a::after{
+      content:"";position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--ink);
+      transition:right .25s ease
+    }
+    .nav-links a:hover::after{right:0}
+    .menu-btn{display:none;border:0;background:transparent;padding:8px;margin-right:-8px;cursor:pointer}
+    .menu-btn span{display:block;width:22px;height:1.5px;background:var(--ink);margin:5px 0;transition:.25s}
+    .mobile-nav{display:none}
+
+    /* HERO */
+    .hero{min-height:calc(100svh - 68px);display:flex;align-items:flex-end;padding:clamp(70px,10vw,140px) 0 42px}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1.34fr) minmax(280px,.66fr);gap:clamp(32px,6vw,96px);align-items:end}
+    .hero-kicker{margin-bottom:26px}
+    .hero h1{
+      margin:0;
+      font-size:clamp(58px,9.7vw,152px);
+      line-height:.84;letter-spacing:-.075em;font-weight:650
+    }
+    .hero h1 .outline{
+      color:transparent;-webkit-text-stroke:1.5px var(--ink);text-stroke:1.5px var(--ink)
+    }
+    .hero-copy{padding-bottom:7px}
+    .hero-copy p{margin:0 0 34px;font-size:clamp(17px,1.55vw,22px);letter-spacing:-.02em}
+    .hero-copy strong{font-weight:700}
+    .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding-top:24px;border-top:1px solid var(--line)}
+    .meta-label{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.11em;margin-bottom:5px}
+    .meta-value{font-size:14px;font-weight:600}
+    .scroll-cue{margin-top:50px;display:flex;gap:10px;align-items:center;color:var(--muted);font-size:12px}
+    .scroll-cue .line{width:55px;height:1px;background:var(--muted);transform-origin:left;animation:linePulse 2.2s ease-in-out infinite}
+    @keyframes linePulse{0%,100%{transform:scaleX(.3);opacity:.35}50%{transform:scaleX(1);opacity:1}}
+
+    /* FEATURED WORK */
+    .featured-list{display:grid;gap:clamp(56px,8vw,110px)}
+    .featured-card{
+      display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);
+      gap:clamp(24px,5vw,72px);align-items:center;
+      cursor:pointer
+    }
+    .featured-card:nth-child(even){grid-template-columns:minmax(300px,.75fr) minmax(0,1.25fr)}
+    .featured-card:nth-child(even) .project-visual{order:2}
+    .project-visual{
+      position:relative;aspect-ratio:16/10;border-radius:var(--radius);overflow:hidden;background:#ddd;
+      box-shadow:var(--shadow)
+    }
+    .project-visual::after{
+      content:"";position:absolute;inset:0;border:1px solid rgba(0,0,0,.08);border-radius:inherit;pointer-events:none
+    }
+    .project-visual img{height:100%;object-fit:cover;transition:transform .65s cubic-bezier(.2,.7,.2,1)}
+    .featured-card:hover .project-visual img{transform:scale(1.035)}
+    .project-num{font-size:12px;color:var(--muted);letter-spacing:.1em;margin-bottom:28px}
+    .project-title{
+      margin:0 0 16px;font-size:clamp(34px,4vw,64px);line-height:1;letter-spacing:-.05em;font-weight:650
+    }
+    .project-role{margin:0 0 22px;color:var(--muted);font-size:14px}
+    .project-blurb{margin:0 0 30px;font-size:clamp(15px,1.25vw,18px);max-width:560px}
+    .tags{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{border:1px solid var(--line);border-radius:999px;padding:7px 11px;font-size:12px}
+    .open-link{
+      margin-top:32px;display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:700
+    }
+    .open-link .arrow{transition:transform .25s}
+    .featured-card:hover .open-link .arrow{transform:translate(5px,-2px)}
+
+    /* ABOUT */
+    .about-grid{display:grid;grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr);gap:clamp(40px,8vw,120px)}
+    .profile-frame{position:sticky;top:110px}
+    .profile-photo{
+      aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;background:#ddd;box-shadow:var(--shadow)
+    }
+    .profile-photo img{height:100%;object-fit:cover;object-position:center top}
+    .profile-caption{margin-top:14px;color:var(--muted);font-size:12px}
+    .about-copy .big-copy{
+      margin:0 0 54px;
+      font-size:clamp(29px,3.8vw,58px);
+      line-height:1.18;letter-spacing:-.045em;font-weight:560
+    }
+    .about-copy .big-copy em{font-style:normal;color:var(--accent)}
+    .info-block{padding:30px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:150px 1fr;gap:28px}
+    .info-block h3{margin:0;font-size:12px;text-transform:uppercase;letter-spacing:.11em}
+    .info-block p{margin:0;color:#44423e;font-size:15px}
+    .timeline{display:grid;gap:18px}
+    .timeline-item{display:grid;grid-template-columns:150px 1fr;gap:20px}
+    .timeline-item time{color:var(--muted);font-size:13px}
+    .timeline-item strong{display:block;font-size:15px;margin-bottom:4px}
+    .timeline-item span{color:var(--muted);font-size:14px}
+    .tool-list{display:flex;flex-wrap:wrap;gap:9px}
+    .tool{
+      padding:9px 13px;background:var(--surface);border:1px solid var(--line);border-radius:10px;
+      font-size:13px;font-weight:600
+    }
+
+    /* ARCHIVE */
+    .archive-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:34px}
+    .filter-btn{
+      border:1px solid var(--line);background:transparent;color:var(--ink);
+      border-radius:999px;padding:9px 14px;cursor:pointer;font-size:12px;font-weight:650
+    }
+    .filter-btn.active{background:var(--ink);color:white;border-color:var(--ink)}
+    .archive-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(18px,2.3vw,34px)}
+    .archive-card{cursor:pointer;min-width:0}
+    .archive-image{aspect-ratio:4/3;border-radius:18px;overflow:hidden;background:#ddd}
+    .archive-image img{height:100%;object-fit:cover;transition:transform .45s ease}
+    .archive-card:hover img{transform:scale(1.035)}
+    .archive-meta{display:flex;justify-content:space-between;gap:16px;padding:14px 1px 0}
+    .archive-title{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .archive-year{font-size:12px;color:var(--muted)}
+    .archive-card[hidden]{display:none}
+
+    /* CONTACT */
+    .contact{padding:clamp(100px,14vw,200px) 0 50px}
+    .contact-card{
+      background:var(--ink);color:white;border-radius:clamp(28px,4vw,52px);
+      padding:clamp(42px,7vw,100px);position:relative;overflow:hidden
+    }
+    .contact-card::after{
+      content:"";position:absolute;width:320px;height:320px;border:80px solid var(--accent);
+      border-radius:50%;right:-120px;bottom:-170px;opacity:.95
+    }
+    .contact-card .eyebrow::before{background:var(--accent)}
+    .contact h2{
+      position:relative;z-index:1;margin:24px 0 44px;max-width:1050px;
+      font-size:clamp(48px,7vw,105px);line-height:.95;letter-spacing:-.065em;font-weight:600
+    }
+    .contact-actions{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:12px}
+    .contact-btn{
+      display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:13px 18px;
+      border:1px solid rgba(255,255,255,.25);font-size:13px;font-weight:650
+    }
+    .contact-btn.primary{background:white;color:var(--ink);border-color:white}
+    .footer{display:flex;justify-content:space-between;gap:20px;padding-top:30px;color:var(--muted);font-size:12px}
+
+    /* MODAL */
+    .modal{
+      position:fixed;inset:0;z-index:100;display:none;background:rgba(16,16,16,.68);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:20px;overflow:auto
+    }
+    .modal.active{display:flex}
+    .modal-panel{
+      width:min(1120px,100%);margin:auto;background:var(--bg);border-radius:28px;overflow:hidden;
+      box-shadow:0 30px 100px rgba(0,0,0,.25)
+    }
+    .modal-top{display:flex;justify-content:flex-end;padding:16px 16px 0}
+    .modal-close{
+      border:1px solid var(--line);background:var(--surface);width:42px;height:42px;border-radius:50%;cursor:pointer;
+      font-size:22px;line-height:1
+    }
+    .modal-body{padding:12px clamp(22px,5vw,70px) clamp(38px,6vw,74px)}
+    .modal-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(260px,.65fr);gap:clamp(28px,5vw,70px);align-items:start}
+    .modal-img{border-radius:20px;overflow:hidden;background:#ddd}
+    .modal-title{margin:6px 0 12px;font-size:clamp(38px,5vw,70px);line-height:1;letter-spacing:-.05em}
+    .modal-desc{color:#44423e;font-size:15px;white-space:pre-line}
+    .modal-spec{margin-top:30px;border-top:1px solid var(--line)}
+    .spec-row{display:grid;grid-template-columns:95px 1fr;gap:18px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px}
+    .spec-row span:first-child{color:var(--muted)}
+    .modal-live{
+      display:inline-flex;margin-top:26px;border-radius:999px;background:var(--ink);color:white;
+      padding:11px 15px;font-size:12px;font-weight:700
+    }
+
+    /* REVEAL */
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.show{opacity:1;transform:none}
+
+    @media (max-width: 980px){
+      .section-head{grid-template-columns:1fr;align-items:start}
+      .hero-grid{grid-template-columns:1fr;gap:55px}
+      .hero{align-items:center}
+      .hero-copy{max-width:620px}
+      .featured-card,.featured-card:nth-child(even){grid-template-columns:1fr}
+      .featured-card:nth-child(even) .project-visual{order:0}
+      .project-info{max-width:680px}
+      .about-grid{grid-template-columns:1fr}
+      .profile-frame{position:static;display:grid;grid-template-columns:minmax(220px,360px) 1fr;gap:24px;align-items:end}
+      .archive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .modal-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 720px){
+      :root{--pad:20px;--radius:18px}
+      .nav-inner{height:60px}
+      .nav-links{display:none}
+      .menu-btn{display:block}
+      .mobile-nav{
+        position:fixed;top:60px;left:0;right:0;z-index:49;background:var(--bg);border-bottom:1px solid var(--line);
+        padding:18px var(--pad) 22px
+      }
+      .mobile-nav.open{display:grid;gap:4px}
+      .mobile-nav a{padding:11px 0;font-size:18px;font-weight:650}
+      .hero{min-height:auto;padding:80px 0 56px}
+      .hero h1{font-size:clamp(58px,20vw,90px)}
+      .hero-meta{grid-template-columns:1fr 1fr}
+      .section{padding:84px 0}
+      .section-title{font-size:clamp(42px,14vw,64px)}
+      .project-visual{aspect-ratio:4/3}
+      .project-title{font-size:clamp(34px,11vw,50px)}
+      .profile-frame{display:block}
+      .profile-photo{max-width:360px}
+      .profile-caption{margin-bottom:36px}
+      .info-block{grid-template-columns:1fr;gap:14px}
+      .timeline-item{grid-template-columns:1fr;gap:6px}
+      .archive-grid{grid-template-columns:1fr}
+      .archive-image{aspect-ratio:16/11}
+      .contact-card::after{width:210px;height:210px;border-width:52px;right:-90px;bottom:-120px}
+      .footer{flex-direction:column}
+      .modal{padding:8px}
+      .modal-panel{border-radius:20px}
+      .modal-body{padding:6px 20px 32px}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      html{scroll-behavior:auto}
+      *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+      .reveal{opacity:1;transform:none}
+    }
+
+
+    /* ===== 2026 V2 REQUESTED LAYOUT OVERRIDES ===== */
+    .page{scroll-margin-top:68px}
+
+    /* Page 01: all copy vertically centered in the viewport */
+    .hero{
+      min-height:calc(100svh - 68px);
+      display:grid;
+      place-items:center;
+      padding:0;
+    }
+    .hero-grid{align-items:center;width:100%}
+    .hero-copy{padding-bottom:0;align-self:center}
+
+    /* Pages 02–05: one large hero image + five small images above copy */
+    .project-page{
+      min-height:100svh;
+      display:flex;
+      align-items:center;
+      border-top:1px solid var(--line);
+      padding:clamp(76px,8vw,122px) 0;
+      scroll-margin-top:74px;
+    }
+    .project-page-grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.18fr) minmax(390px,.82fr);
+      gap:clamp(36px,5vw,78px);
+      align-items:center;
+    }
+    .project-page:nth-child(even) .project-page-grid{
+      grid-template-columns:minmax(390px,.82fr) minmax(0,1.18fr);
+    }
+    .project-page:nth-child(even) .project-main{order:2}
+    .project-main{
+      position:relative;aspect-ratio:16/10;border-radius:var(--radius);
+      overflow:hidden;background:#ddd;box-shadow:var(--shadow)
+    }
+    .project-main::after{
+      content:"";position:absolute;inset:0;border:1px solid rgba(0,0,0,.08);
+      border-radius:inherit;pointer-events:none
+    }
+    .project-main img{height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+    .project-page:hover .project-main img{transform:scale(1.025)}
+    .project-side{min-width:0}
+    .project-number{font-size:12px;color:var(--muted);letter-spacing:.1em;margin-bottom:16px}
+    .mini-gallery{
+      display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;
+      margin:0 0 30px
+    }
+    .mini-item{
+      aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:#e8e5df;
+      border:1px solid var(--line);position:relative
+    }
+    .mini-item img{width:100%;height:100%;object-fit:cover;transition:transform .35s ease}
+    .mini-item:hover img{transform:scale(1.06)}
+    .mini-placeholder{
+      height:100%;display:grid;place-items:center;text-align:center;padding:8px;
+      color:#96918a;font-size:9px;line-height:1.25;letter-spacing:.06em;text-transform:uppercase
+    }
+    .project-copy{padding-top:26px;border-top:1px solid var(--line)}
+    .project-copy .project-title{font-size:clamp(38px,4.3vw,68px);margin-bottom:12px}
+    .project-copy .project-role{margin-bottom:18px;font-size:13px}
+    .project-copy .project-blurb{margin-bottom:26px}
+    button.open-link{border:0;background:transparent;padding:0;cursor:pointer;color:inherit}
+
+    /* Page 06: Education + tool proficiency graph */
+    .education-tools{display:grid;grid-template-columns:1fr;gap:36px}
+    .tool-graph{display:grid;gap:18px;padding-top:30px;border-top:1px dashed var(--line)}
+    .tool-graph-title{display:flex;justify-content:space-between;align-items:center;gap:20px}
+    .tool-graph-title strong{font-size:14px}
+    .tool-graph-title span{font-size:12px;color:var(--muted)}
+    .skill-list{display:grid;gap:16px}
+    .skill-row{display:grid;grid-template-columns:150px 1fr 30px;align-items:center;gap:16px}
+    .skill-name{font-size:13px;font-weight:700}
+    .skill-track{position:relative;height:7px;background:#dedbd5;border-radius:999px;overflow:hidden}
+    .skill-fill{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:var(--ink)}
+    .skill-fill.high{width:88%}
+    .skill-fill.mid{width:62%}
+
+    /* Certificate image cards: horizontal scroll */
+    .cert-block{margin-top:60px;padding-top:38px;border-top:1px solid var(--line)}
+    .cert-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}
+    .cert-head h3{margin:7px 0 0;font-size:clamp(28px,3vw,46px);letter-spacing:-.04em}
+    .cert-controls{display:flex;gap:8px}
+    .cert-control{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:18px}
+    .cert-scroll{
+      display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
+      padding:4px 2px 18px;scrollbar-width:thin;overscroll-behavior-inline:contain
+    }
+    .cert-card{
+      flex:0 0 220px;scroll-snap-align:start;background:var(--surface);
+      border:1px solid var(--line);border-radius:18px;padding:12px
+    }
+    .cert-image-slot{
+      aspect-ratio:4/3;border-radius:12px;background:#ece9e2;border:1px dashed #bbb5ac;
+      display:grid;place-items:center;color:#908a82;font-size:10px;text-align:center;
+      line-height:1.4;letter-spacing:.06em;text-transform:uppercase;overflow:hidden
+    }
+    .cert-image-slot img{width:100%;height:100%;object-fit:cover}
+    .cert-name{margin:13px 2px 3px!important;font-size:13px!important;font-weight:750;line-height:1.4;color:var(--ink)!important}
+    .cert-date{margin:0 2px!important;color:var(--muted)!important;font-size:11px!important}
+
+    /* Page 07: year grouped, intentionally large work images */
+    .year-groups{display:grid;gap:82px}
+    .year-block{min-width:0}
+    .year-head{
+      display:flex;align-items:end;justify-content:space-between;gap:30px;
+      padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:24px
+    }
+    .year-label{font-size:clamp(48px,7vw,100px);line-height:.85;letter-spacing:-.07em;font-weight:650}
+    .year-count{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+    .year-row{
+      display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;
+      padding:0 0 22px;scrollbar-width:thin;overscroll-behavior-inline:contain
+    }
+    .year-card{flex:0 0 520px;scroll-snap-align:start;cursor:pointer}
+    .year-card-image{width:520px;height:360px;border-radius:22px;overflow:hidden;background:#ddd;box-shadow:var(--shadow)}
+    .year-card-image img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+    .year-card:hover .year-card-image img{transform:scale(1.025)}
+    .year-card-info{display:flex;justify-content:space-between;gap:16px;padding:15px 2px 0}
+    .year-card-title{font-size:16px;font-weight:750}
+    .year-card-cat{font-size:12px;color:var(--muted);text-align:right}
+
+    @media(max-width:980px){
+      .project-page{min-height:auto}
+      .project-page-grid,.project-page:nth-child(even) .project-page-grid{grid-template-columns:1fr;gap:30px}
+      .project-page:nth-child(even) .project-main{order:0}
+      .mini-gallery{display:flex;overflow-x:auto;gap:10px;padding-bottom:8px;scroll-snap-type:x mandatory}
+      .mini-item{flex:0 0 130px;scroll-snap-align:start}
+    }
+
+    @media(max-width:720px){
+      .page{scroll-margin-top:66px}
+      .hero{min-height:calc(100svh - 66px);padding:34px 0}
+      .hero-grid{gap:38px}
+      .project-page{padding:72px 0;scroll-margin-top:66px}
+      .project-main{aspect-ratio:4/3}
+      .mini-item{flex-basis:118px}
+      .skill-row{grid-template-columns:110px 1fr 26px;gap:10px}
+      .skill-name{font-size:12px}
+      .cert-card{flex-basis:190px}
+      .year-row{margin-right:calc(var(--pad) * -1);padding-right:var(--pad)}
+      .year-card{flex:0 0 84vw}
+      .year-card-image{width:84vw;height:58vw;max-height:420px}
+    }
+
+
+    /* =========================================================
+       V3 — About / Education / Tools / Certificates refinements
+       ========================================================= */
+    .about-intro-grid{
+      display:grid;
+      grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr);
+      gap:clamp(40px,8vw,120px);
+      align-items:start;
+    }
+    .about-intro-grid .profile-frame{position:static;top:auto}
+
+    .about-detail-grid{
+      display:grid;
+      grid-template-columns:minmax(280px,.72fr) minmax(0,1.28fr);
+      gap:clamp(40px,8vw,120px);
+      margin-top:clamp(48px,6vw,80px);
+      padding-top:clamp(34px,4vw,54px);
+      border-top:1px solid var(--line);
+      align-items:start;
+    }
+    .detail-panel{min-width:0}
+    .detail-panel-head{margin-bottom:28px}
+    .detail-panel-head h3{
+      margin:8px 0 0;
+      font-size:clamp(28px,3vw,44px);
+      line-height:1;
+      letter-spacing:-.04em;
+      font-weight:650;
+    }
+    .compact-timeline{gap:22px}
+    .education-panel .timeline-item{
+      grid-template-columns:1fr;
+      gap:5px;
+      padding-bottom:18px;
+      border-bottom:1px solid rgba(21,21,21,.08);
+    }
+    .education-panel .timeline-item:last-child{padding-bottom:0;border-bottom:0}
+    .tools-graph-reset{padding-top:0;border-top:0}
+
+    /* Exactly five certificate cards per row, two rows for 10 cards. */
+    .cert-head{align-items:end}
+    .cert-layout-note{margin:0;color:var(--muted);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+    .cert-controls{display:none!important}
+    .cert-scroll{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      grid-auto-flow:row;
+      gap:16px;
+      overflow-x:visible;
+      scroll-snap-type:none;
+      padding:4px 2px 2px;
+      scrollbar-width:none;
+    }
+    .cert-card{
+      min-width:0;
+      width:auto;
+      flex:none;
+      scroll-snap-align:none;
+    }
+
+    @media(max-width:980px){
+      .about-intro-grid,
+      .about-detail-grid{
+        grid-template-columns:minmax(220px,.72fr) minmax(0,1.28fr);
+        gap:36px;
+      }
+      .cert-scroll{
+        grid-template-columns:repeat(5,180px);
+        overflow-x:auto;
+        overflow-y:hidden;
+        padding-bottom:16px;
+        scrollbar-width:thin;
+        overscroll-behavior-inline:contain;
+      }
+    }
+
+    @media(max-width:720px){
+      .about-intro-grid,
+      .about-detail-grid{
+        grid-template-columns:1fr;
+        gap:34px;
+      }
+
+      /* Mobile: intentionally smaller portrait than desktop. */
+      .about-intro-grid .profile-frame{
+        display:block;
+        width:100%;
+      }
+      .about-intro-grid .profile-photo{
+        width:min(42vw,180px);
+        max-width:180px;
+        margin:0 auto;
+        border-radius:16px;
+      }
+      .about-intro-grid .profile-caption{
+        margin:11px 0 0;
+        text-align:center;
+        font-size:11px;
+      }
+      .about-copy .big-copy{
+        margin-top:6px;
+        font-size:clamp(27px,8.5vw,42px);
+      }
+
+      /* On narrow screens Education and Tools stack for readability. */
+      .about-detail-grid{
+        margin-top:50px;
+        padding-top:34px;
+      }
+      .education-panel .timeline-item{grid-template-columns:1fr}
+
+      /* Keep the certificate section as 5 columns x 2 rows; swipe sideways. */
+      .cert-head{align-items:start;flex-direction:column}
+      .cert-layout-note{font-size:10px}
+      .cert-scroll{
+        grid-template-columns:repeat(5,158px);
+        gap:12px;
+        width:100%;
+        overflow-x:auto;
+        overflow-y:hidden;
+        padding:4px 0 16px;
+      }
+      .cert-card{
+        padding:10px;
+        border-radius:15px;
+      }
+      .cert-name{font-size:12px!important}
+      .cert-date{font-size:10px!important}
+    }
+
+
+    /* =========================================================
+       V4 — DISTINCTIVE EDITORIAL PORTFOLIO SYSTEM
+       ========================================================= */
+    :root{
+      --bg:#f2efe8;
+      --surface:#fbfaf7;
+      --ink:#111111;
+      --muted:#706c64;
+      --line:rgba(17,17,17,.16);
+      --accent:#2d55ff;
+      --accent-soft:#dfe5ff;
+      --signal:#dfff52;
+      --radius:22px;
+      --shadow:0 22px 70px rgba(17,17,17,.09);
+    }
+
+    body{
+      background:
+        linear-gradient(rgba(17,17,17,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17,17,17,.025) 1px, transparent 1px),
+        var(--bg);
+      background-size:40px 40px;
+    }
+
+    .nav{
+      background:rgba(242,239,232,.84);
+      border-bottom:1px solid var(--ink);
+    }
+    .brand{letter-spacing:-.055em}
+    .brand .dot{color:var(--accent)}
+
+    /* Page 01: integrated profile page */
+    .intro-page{
+      position:relative;
+      overflow:hidden;
+      padding:clamp(72px,8vw,120px) 0 clamp(90px,10vw,150px);
+      border-bottom:1px solid var(--ink);
+    }
+    .intro-page::before{
+      content:"";
+      position:absolute;
+      top:0;left:0;right:0;height:10px;
+      background:linear-gradient(90deg,var(--accent) 0 70%,var(--signal) 70% 100%);
+    }
+    .intro-orbit{
+      position:absolute;
+      border:1px solid rgba(45,85,255,.34);
+      border-radius:50%;
+      pointer-events:none;
+    }
+    .intro-orbit-a{width:540px;height:540px;right:-230px;top:90px}
+    .intro-orbit-b{width:230px;height:230px;right:135px;top:245px;border-color:rgba(17,17,17,.18)}
+
+    .intro-masthead{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns:minmax(0,1.45fr) minmax(310px,.55fr);
+      gap:clamp(34px,6vw,90px);
+      align-items:end;
+      min-height:calc(100svh - 180px);
+      padding-bottom:clamp(60px,7vw,100px);
+    }
+    .intro-title-wrap{position:relative}
+    .page-stamp{
+      position:absolute;right:1%;top:-8%;
+      font-size:clamp(120px,17vw,270px);
+      font-weight:850;line-height:.8;letter-spacing:-.1em;
+      color:transparent;
+      -webkit-text-stroke:1px rgba(17,17,17,.16);
+      pointer-events:none;
+      z-index:-1;
+    }
+    .intro-title{
+      margin:22px 0 28px;
+      font-size:clamp(68px,10vw,158px);
+      line-height:.82;
+      letter-spacing:-.078em;
+      font-weight:680;
+    }
+    .intro-title span{
+      color:var(--accent);
+      font-style:italic;
+      font-weight:520;
+    }
+    .intro-lead{
+      max-width:650px;
+      margin:0;
+      font-size:clamp(17px,1.55vw,23px);
+      letter-spacing:-.025em;
+    }
+
+    .identity-card{
+      position:relative;
+      background:var(--signal);
+      color:var(--ink);
+      border:1px solid var(--ink);
+      border-radius:0 0 42px 0;
+      padding:16px;
+      transform:rotate(1.2deg);
+      box-shadow:12px 12px 0 var(--ink);
+    }
+    .identity-top{
+      display:flex;justify-content:space-between;gap:20px;
+      font-size:10px;font-weight:800;letter-spacing:.12em;
+      padding-bottom:12px;border-bottom:1px solid var(--ink);
+    }
+    .intro-profile-photo{
+      margin:16px 0;
+      aspect-ratio:4/4.65;
+      overflow:hidden;
+      background:#ddd;
+      border:1px solid var(--ink);
+      filter:grayscale(100%);
+    }
+    .intro-profile-photo img{height:100%;object-fit:cover;object-position:center top}
+    .identity-name{
+      font-size:clamp(44px,4.8vw,70px);
+      line-height:.78;
+      letter-spacing:-.07em;
+      font-weight:850;
+      padding:7px 0 18px;
+    }
+    .identity-meta{
+      display:flex;flex-wrap:wrap;gap:6px;
+      padding-top:12px;border-top:1px solid var(--ink);
+    }
+    .identity-meta span{
+      border:1px solid var(--ink);
+      border-radius:999px;
+      padding:5px 9px;
+      font-size:10px;font-weight:800;
+    }
+
+    .intro-board{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      position:relative;
+      z-index:2;
+    }
+    .intro-panel{
+      position:relative;
+      background:rgba(251,250,247,.93);
+      border:1px solid var(--ink);
+      padding:clamp(26px,3vw,42px);
+      overflow:hidden;
+    }
+    .intro-panel-about{
+      grid-row:span 2;
+      border-radius:0 36px 0 0;
+    }
+    .intro-panel-education{background:var(--accent);color:#fff;border-radius:36px 0 0 0}
+    .intro-panel-education .eyebrow::before{background:var(--signal)}
+    .intro-panel-skills{border-radius:0 0 36px 0}
+    .panel-index{
+      position:absolute;right:18px;top:12px;
+      font-size:58px;line-height:1;font-weight:850;
+      letter-spacing:-.08em;opacity:.09;
+    }
+    .intro-statement{
+      margin:28px 0 50px;
+      font-size:clamp(30px,3.5vw,56px);
+      line-height:1.13;
+      letter-spacing:-.048em;
+      font-weight:560;
+    }
+    .intro-statement em{font-style:normal;color:var(--accent)}
+    .experience-list{border-top:1px solid var(--line)}
+    .experience-row{
+      display:grid;
+      grid-template-columns:155px 1fr;
+      gap:22px;
+      padding:20px 0;
+      border-bottom:1px solid var(--line);
+    }
+    .experience-row time{font-size:12px;color:var(--muted)}
+    .experience-row strong{display:block;margin-bottom:4px;font-size:14px}
+    .experience-row span{display:block;color:var(--muted);font-size:13px}
+
+    .compact-education{display:grid;gap:0;margin-top:28px}
+    .compact-education > div{
+      display:grid;grid-template-columns:125px 1fr;
+      gap:14px;
+      padding:15px 0;
+      border-top:1px solid rgba(255,255,255,.34);
+    }
+    .compact-education time{font-size:11px;opacity:.7}
+    .compact-education strong{display:block;font-size:14px}
+    .compact-education span{display:block;font-size:12px;opacity:.75;margin-top:2px}
+
+    .intro-skill-list{margin-top:30px}
+    .intro-skill-list .skill-track{background:#dedbd3}
+    .intro-skill-list .skill-fill{background:var(--accent)}
+    .intro-skill-list .skill-fill.high{width:88%}
+    .intro-skill-list .skill-fill.mid{width:62%}
+
+    .intro-certificates{
+      position:relative;
+      z-index:2;
+      margin-top:18px;
+      background:var(--ink);
+      color:#fff;
+      padding:clamp(28px,4vw,50px);
+      border-radius:0 0 54px 54px;
+    }
+    .intro-certificates .eyebrow::before{background:var(--signal)}
+    .cert-title-row{
+      display:flex;justify-content:space-between;align-items:end;gap:30px;
+      margin-bottom:28px;
+    }
+    .cert-title-row h2{
+      margin:8px 0 0;
+      font-size:clamp(38px,5vw,72px);
+      line-height:.9;letter-spacing:-.055em;
+    }
+    .cert-title-row p{margin:0;color:#a7a7a7;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+    .intro-certificates .cert-scroll{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:12px;
+      overflow:visible;
+      padding:0;
+    }
+    .intro-certificates .cert-card{
+      background:#1d1d1d;
+      color:#fff;
+      border:1px solid #3c3c3c;
+      border-radius:14px;
+      padding:10px;
+      min-width:0;
+    }
+    .intro-certificates .cert-image-slot{
+      background:#292929;
+      border-color:#555;
+      color:#7f7f7f;
+    }
+    .intro-certificates .cert-name{color:#fff!important}
+    .intro-certificates .cert-date{color:#909090!important}
+
+    /* Pages 02–05: asymmetric art-direction */
+    .project-page{
+      position:relative;
+      background:var(--surface);
+      border-top:1px solid var(--ink);
+      overflow:hidden;
+    }
+    .project-page::before{
+      content:attr(data-page);
+      position:absolute;
+      left:-12px;bottom:-45px;
+      font-size:clamp(180px,24vw,360px);
+      font-weight:900;line-height:.75;letter-spacing:-.12em;
+      color:rgba(45,85,255,.055);
+      pointer-events:none;
+    }
+    .project-page:nth-child(2n){background:#e9eefe}
+    .project-main{
+      border-radius:0 50px 0 0;
+      box-shadow:14px 14px 0 var(--ink);
+      border:1px solid var(--ink);
+    }
+    .project-page:nth-child(even) .project-main{
+      border-radius:50px 0 0 0;
+    }
+    .mini-gallery{
+      position:relative;
+      z-index:2;
+      gap:10px;
+    }
+    .mini-item{
+      border:1px solid var(--ink);
+      border-radius:0;
+      transform:rotate(-1deg);
+      background:#fff;
+    }
+    .mini-item:nth-child(even){transform:rotate(1.25deg) translateY(-6px)}
+    .mini-item:nth-child(3){transform:rotate(-.3deg) translateY(4px)}
+    .project-copy{
+      background:var(--surface);
+      border:1px solid var(--ink);
+      padding:28px;
+      box-shadow:8px 8px 0 var(--accent);
+    }
+    .project-page:nth-child(2n) .project-copy{background:#fff}
+    .project-title{font-weight:780}
+    .tag{
+      background:var(--signal);
+      border-color:var(--ink);
+      font-weight:700;
+    }
+
+    /* Page 07: no horizontal scrolling — year-based overview grid */
+    #archive{
+      background:#111;
+      color:#fff;
+      border-top:10px solid var(--signal);
+    }
+    #archive .section-desc{color:#a6a6a6}
+    #archive .eyebrow::before{background:var(--signal)}
+    .year-groups{display:grid;gap:70px}
+    .year-block{
+      display:grid;
+      grid-template-columns:180px minmax(0,1fr);
+      gap:32px;
+      align-items:start;
+      padding-top:26px;
+      border-top:1px solid #3a3a3a;
+    }
+    .year-head{
+      position:sticky;
+      top:100px;
+      display:block;
+      margin:0;
+      padding:0;
+      border:0;
+    }
+    .year-label{
+      color:var(--signal);
+      font-size:clamp(62px,7vw,108px);
+      line-height:.8;
+      font-weight:820;
+    }
+    .year-count{margin-top:14px;color:#888}
+    .year-row{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:26px 18px;
+      overflow:visible;
+      padding:0;
+    }
+    .year-card{
+      width:auto;
+      min-width:0;
+      flex:none;
+      cursor:pointer;
+      scroll-snap-align:none;
+    }
+    .year-card-image{
+      width:100%;
+      height:auto;
+      aspect-ratio:4/3;
+      border-radius:0 28px 0 0;
+      border:1px solid #3b3b3b;
+      box-shadow:none;
+      background:#222;
+    }
+    .year-card:nth-child(3n+2) .year-card-image{border-radius:28px 0 0 0}
+    .year-card:nth-child(3n) .year-card-image{border-radius:0}
+    .year-card-info{
+      color:#fff;
+      border-top:1px solid #3a3a3a;
+      margin-top:11px;
+      padding:11px 0 0;
+    }
+    .year-card-cat{color:#8c8c8c}
+    .year-card:hover .year-card-image img{transform:scale(1.04)}
+
+    /* Contact picks up the visual identity */
+    .contact{background:#111}
+    .contact-card{
+      background:var(--accent);
+      border:1px solid #fff;
+      border-radius:54px 0 54px 0;
+    }
+    .contact-card::after{
+      border-color:var(--signal);
+      opacity:1;
+    }
+    .footer{color:#777}
+
+    @media(max-width:1100px){
+      .intro-masthead{
+        grid-template-columns:minmax(0,1.2fr) 320px;
+      }
+      .intro-board{grid-template-columns:1fr 1fr}
+      .intro-panel-about{grid-column:1 / -1;grid-row:auto}
+      .intro-certificates .cert-scroll{grid-template-columns:repeat(5,minmax(150px,1fr))}
+      .year-block{grid-template-columns:130px minmax(0,1fr)}
+      .year-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media(max-width:820px){
+      .intro-masthead{
+        min-height:auto;
+        grid-template-columns:1fr;
+        padding:38px 0 64px;
+      }
+      .identity-card{
+        width:min(100%,420px);
+        transform:rotate(.5deg);
+        box-shadow:8px 8px 0 var(--ink);
+      }
+      .intro-board{grid-template-columns:1fr}
+      .intro-panel-about{grid-column:auto}
+      .intro-certificates .cert-scroll{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .cert-title-row{align-items:start;flex-direction:column}
+      .year-block{grid-template-columns:1fr}
+      .year-head{position:static;display:flex;align-items:end;justify-content:space-between}
+      .year-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media(max-width:720px){
+      body{background-size:28px 28px}
+      .intro-page{padding-top:52px}
+      .intro-orbit{display:none}
+      .intro-title{font-size:clamp(64px,19vw,92px);margin-top:18px}
+      .intro-lead{font-size:16px}
+      .page-stamp{font-size:140px;top:5%;right:-2%}
+
+      /* Mobile profile image intentionally smaller */
+      .identity-card{
+        width:100%;
+        padding:14px;
+        border-radius:0 0 28px 0;
+      }
+      .intro-profile-photo{
+        width:min(44vw,150px);
+        aspect-ratio:1/1.16;
+        margin:16px 0 16px auto;
+      }
+      .identity-name{
+        position:absolute;
+        left:16px;
+        bottom:52px;
+        font-size:clamp(43px,13vw,62px);
+      }
+      .identity-meta{margin-top:6px}
+
+      .intro-panel{padding:24px 20px}
+      .intro-statement{font-size:clamp(28px,8.5vw,42px);margin-bottom:34px}
+      .experience-row{grid-template-columns:1fr;gap:6px}
+      .compact-education > div{grid-template-columns:1fr;gap:3px}
+      .skill-row{grid-template-columns:105px 1fr 24px;gap:9px}
+      .skill-name{font-size:11px}
+
+      .intro-certificates{
+        padding:28px 18px;
+        border-radius:0 0 34px 34px;
+      }
+      .intro-certificates .cert-scroll{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+      }
+      .intro-certificates .cert-card{padding:8px}
+      .cert-title-row h2{font-size:42px}
+
+      .project-copy{
+        padding:22px 18px;
+        box-shadow:6px 6px 0 var(--accent);
+      }
+      .project-main{box-shadow:8px 8px 0 var(--ink)}
+      .mini-gallery{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));overflow:visible}
+      .mini-item{min-width:0;flex:none}
+
+      #archive{padding-top:84px}
+      .year-groups{gap:54px}
+      .year-head{padding-bottom:12px;border-bottom:1px solid #3a3a3a}
+      .year-row{grid-template-columns:1fr;gap:24px}
+      .year-card-image{aspect-ratio:16/11}
+      .year-card-info{font-size:13px}
+    }
+
+
+    /* =========================================================
+       FINAL — CURRENT ASSETS + MOBILE RESPONSIVE OVERRIDES
+       ========================================================= */
+    .project-main img,.mini-item img,.year-card-image img{
+      width:100%;height:100%;object-fit:cover;
+    }
+    .project-main{aspect-ratio:16/9}
+    .mini-item{aspect-ratio:16/9;overflow:hidden}
+    .year-card-image{aspect-ratio:16/9}
+    .project-copy{min-width:0}
+    .project-title{overflow-wrap:anywhere}
+    .project-blurb{word-break:keep-all}
+    .identity-card img{width:100%;height:100%;object-fit:cover;object-position:center 28%}
+
+    @media(max-width:980px){
+      .project-page{min-height:auto;padding:86px 0}
+      .project-page-grid,.project-page:nth-child(even) .project-page-grid{
+        grid-template-columns:1fr !important;gap:28px;
+      }
+      .project-page:nth-child(even) .project-main,.project-main{order:0}
+      .project-side{order:1}
+      .mini-gallery{
+        display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:10px;overflow:visible;
+      }
+      .mini-item{min-width:0;transform:none !important}
+      .year-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media(max-width:720px){
+      :root{--pad:18px}
+      .nav-inner{height:60px}.mobile-nav{top:60px}
+      .intro-page{padding-top:32px}
+      .intro-masthead{padding:20px 0 44px;gap:26px}
+      .intro-title{font-size:clamp(54px,17vw,82px);line-height:.86;margin:14px 0 22px}
+      .intro-lead{font-size:15px;line-height:1.65}
+      .identity-card{max-width:390px;margin-inline:auto}
+      .intro-profile-photo{width:min(46vw,170px);margin:14px 0 14px auto}
+      .identity-name{left:14px;bottom:52px;font-size:clamp(40px,12vw,58px)}
+      .intro-board{gap:14px}
+      .intro-panel{padding:22px 18px}
+      .intro-statement{font-size:clamp(27px,8vw,40px)}
+
+      .project-page{padding:68px 0}
+      .project-main{border-radius:0 24px 0 0 !important;box-shadow:6px 6px 0 var(--ink)}
+      .project-number{font-size:10px}
+      .mini-gallery{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px}
+      .mini-item{aspect-ratio:16/10;border-radius:0}
+      .project-copy{padding:20px 16px;box-shadow:5px 5px 0 var(--accent)}
+      .project-title{font-size:clamp(31px,10vw,46px);line-height:1.02}
+      .project-role{font-size:12px}
+      .project-blurb{font-size:14px;line-height:1.7}
+      .tags{gap:6px}.tag{font-size:10px;padding:6px 9px}
+
+      #archive{padding-top:72px}
+      .year-block{grid-template-columns:1fr;gap:18px}
+      .year-head{position:static}
+      .year-row{grid-template-columns:1fr !important;gap:22px}
+      .year-card-image{aspect-ratio:16/9}
+      .year-label{font-size:64px}
+      .year-card-title{font-size:14px}
+      .year-card-cat{font-size:11px}
+      .intro-certificates .cert-scroll{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media(max-width:420px){
+      .mini-gallery{grid-template-columns:1fr !important}
+      .intro-certificates .cert-scroll{grid-template-columns:1fr 1fr}
+      .identity-name{font-size:39px}
+      .contact-card{padding:32px 20px}
+    }
+
+
+    @media(max-width:720px){
+      html{scroll-padding-top:60px}
+      .page,#archive,#contact{scroll-margin-top:60px}
+    }
+
+
+    /* =========================================================
+       FINAL READABILITY / IMAGE-FOCUS OVERRIDES
+       ========================================================= */
+
+    /* 1. Text: prevent clipping and ellipsis */
+    h1,h2,h3,h4,h5,h6,p,strong,span,time,a,button,
+    .project-title,.project-role,.project-blurb,
+    .year-card-title,.year-card-cat,.archive-title,
+    .cert-text-item,.experience-row,.compact-education{
+      white-space:normal;
+      text-overflow:clip;
+      word-break:keep-all;
+      overflow-wrap:break-word;
+      max-width:100%;
+    }
+
+    .archive-title{
+      overflow:visible;
+      white-space:normal;
+      text-overflow:clip;
+    }
+
+    .project-side,
+    .project-copy,
+    .year-card-info,
+    .intro-panel,
+    .experience-row > div,
+    .compact-education > div{
+      min-width:0;
+    }
+
+    /* 2. Qualifications: image-free, grouped by year */
+    .intro-certificates{
+      padding:clamp(28px,4vw,48px);
+    }
+
+    .intro-certificates .cert-scroll,
+    .cert-scroll.cert-year-list{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      overflow:visible;
+      padding:0;
+      scroll-snap-type:none;
+    }
+
+    .cert-year-group{
+      display:grid;
+      grid-template-columns:72px minmax(0,1fr);
+      gap:18px;
+      align-items:start;
+      padding:20px;
+      border:1px solid #3d3d3d;
+      background:#191919;
+      border-radius:14px;
+    }
+
+    .cert-year{
+      color:var(--signal);
+      font-size:clamp(24px,2.4vw,36px);
+      line-height:1;
+      font-weight:820;
+      letter-spacing:-.045em;
+    }
+
+    .cert-year-items{
+      display:grid;
+      gap:0;
+      min-width:0;
+    }
+
+    .cert-text-item{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:14px;
+      align-items:start;
+      padding:11px 0;
+      border-bottom:1px solid #353535;
+    }
+
+    .cert-text-item:first-child{padding-top:0}
+    .cert-text-item:last-child{
+      padding-bottom:0;
+      border-bottom:0;
+    }
+
+    .cert-text-item strong{
+      color:#fff;
+      font-size:13px;
+      line-height:1.5;
+      font-weight:700;
+    }
+
+    .cert-text-item span{
+      color:#8f8f8f;
+      font-size:11px;
+      line-height:1.5;
+      text-align:right;
+    }
+
+    .cert-card,
+    .cert-image-slot{
+      display:none !important;
+    }
+
+    /* 3. Work: give detail images more visual weight */
+    .project-page-grid{
+      grid-template-columns:minmax(0,1.12fr) minmax(420px,.88fr) !important;
+      gap:clamp(28px,3.6vw,54px);
+      align-items:center;
+    }
+
+    .project-page:nth-child(even) .project-page-grid{
+      grid-template-columns:minmax(420px,.88fr) minmax(0,1.12fr) !important;
+    }
+
+    .mini-gallery{
+      display:grid !important;
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      gap:12px !important;
+      margin:0 0 18px !important;
+      overflow:visible !important;
+    }
+
+    .mini-item{
+      min-width:0 !important;
+      width:100%;
+      aspect-ratio:16/10 !important;
+      transform:none !important;
+      border-radius:8px !important;
+    }
+
+    .mini-item:nth-child(5){
+      grid-column:1 / -1;
+      aspect-ratio:2.15/1 !important;
+    }
+
+    .project-copy{
+      padding:16px 17px !important;
+      box-shadow:5px 5px 0 var(--accent) !important;
+    }
+
+    .project-copy .project-title,
+    .project-title{
+      font-size:clamp(27px,2.7vw,43px) !important;
+      line-height:1.06 !important;
+      margin:0 0 8px !important;
+      letter-spacing:-.04em;
+    }
+
+    .project-role{
+      margin:0 0 10px !important;
+      font-size:11px !important;
+      line-height:1.5;
+    }
+
+    .project-blurb{
+      margin:0 0 13px !important;
+      font-size:13px !important;
+      line-height:1.62 !important;
+    }
+
+    .project-copy .tags{gap:5px}
+    .project-copy .tag{
+      padding:5px 8px;
+      font-size:10px;
+    }
+
+    .project-copy .open-link{
+      margin-top:15px;
+      font-size:11px;
+    }
+
+    /* 4. All Works: reduce year label and reserve a narrower column */
+    .year-block{
+      grid-template-columns:112px minmax(0,1fr) !important;
+      gap:22px !important;
+    }
+
+    .year-label{
+      font-size:clamp(42px,2.6vw,70px) !important;
+      line-height:.92 !important;
+      letter-spacing:-.055em !important;
+    }
+
+    .year-count{
+      margin-top:9px !important;
+      font-size:10px;
+    }
+
+    .year-head{top:88px}
+
+    @media(max-width:1100px){
+      .project-page-grid,
+      .project-page:nth-child(even) .project-page-grid{
+        grid-template-columns:1fr !important;
+      }
+
+      .project-page:nth-child(even) .project-main{order:0}
+
+      .project-side{
+        display:grid;
+        grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);
+        column-gap:24px;
+        align-items:start;
+      }
+
+      .project-number{grid-column:1 / -1}
+      .mini-gallery{margin-bottom:0 !important}
+      .project-copy{align-self:start}
+
+      .year-block{
+        grid-template-columns:94px minmax(0,1fr) !important;
+      }
+
+      .year-label{
+        font-size:clamp(38px,2.6vw,58px) !important;
+      }
+    }
+
+    @media(max-width:820px){
+      .intro-certificates .cert-scroll,
+      .cert-scroll.cert-year-list{
+        grid-template-columns:1fr;
+      }
+
+      .project-side{display:block}
+      .mini-gallery{margin-bottom:16px !important}
+
+      .year-block{
+        grid-template-columns:1fr !important;
+        gap:15px !important;
+      }
+
+      .year-head{
+        position:static !important;
+        display:flex;
+        align-items:flex-end;
+        justify-content:space-between;
+        gap:18px;
+      }
+
+      .year-label{font-size:44px !important}
+    }
+
+    @media(max-width:720px){
+      .cert-year-group{
+        grid-template-columns:60px minmax(0,1fr);
+        gap:13px;
+        padding:16px 14px;
+      }
+
+      .cert-year{font-size:25px}
+
+      .cert-text-item{
+        grid-template-columns:1fr;
+        gap:2px;
+        padding:10px 0;
+      }
+
+      .cert-text-item span{
+        text-align:left;
+        font-size:10px;
+      }
+
+      .mini-gallery{
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+        gap:8px !important;
+      }
+
+      .mini-item:nth-child(5){grid-column:1 / -1}
+
+      .project-copy{padding:14px !important}
+
+      .project-copy .project-title,
+      .project-title{
+        font-size:clamp(27px,8.8vw,38px) !important;
+      }
+
+      .project-blurb{
+        font-size:12px !important;
+        line-height:1.65 !important;
+      }
+
+      .year-label{font-size:38px !important}
+
+      .year-card-title,
+      .year-card-cat{
+        display:block;
+        width:100%;
+      }
+
+      .year-card-info{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:4px;
+      }
+    }
+
+    @media(max-width:430px){
+      .mini-gallery{grid-template-columns:1fr !important}
+
+      .mini-item,
+      .mini-item:nth-child(5){
+        grid-column:auto;
+        aspect-ratio:16/10 !important;
+      }
+
+      .cert-year-group{grid-template-columns:1fr}
+
+      .cert-year{
+        padding-bottom:9px;
+        border-bottom:1px solid #353535;
+      }
+    }
+
+
+    /* Final year label sizing request */
+    .year-label{
+      font-size:3.3vw !important;
+    }
+
+    @media(max-width:820px){
+      .year-label{
+        font-size:clamp(34px,7vw,44px) !important;
+      }
+    }
+
+
+    /* Work detail gallery: exactly 4 images */
+    .mini-gallery{
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      gap:12px !important;
+    }
+
+    .mini-item,
+    .mini-item:nth-child(5){
+      grid-column:auto !important;
+      aspect-ratio:16/10 !important;
+    }
+
+    @media(max-width:720px){
+      .mini-gallery{
+        grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      }
+    }
+
+    @media(max-width:430px){
+      .mini-gallery{
+        grid-template-columns:1fr !important;
+      }
+    }
+
+
+    /* Profile photo: full color */
+    .intro-profile-photo{
+      filter:none !important;
+    }
+
+    .intro-profile-photo img{
+      filter:none !important;
+    }
+
+
+    /* Qualifications: clearer year-based hierarchy */
+    .intro-certificates{
+      background:#111;
+      border-radius:0 0 44px 44px;
+      padding:clamp(30px,4vw,50px);
+    }
+
+    .intro-certificates .cert-scroll,
+    .cert-scroll.cert-year-list{
+      display:grid !important;
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+      gap:18px !important;
+    }
+
+    .cert-year-group{
+      display:block !important;
+      padding:0 !important;
+      border:1px solid #3a3a3a !important;
+      border-radius:16px !important;
+      background:#181818 !important;
+      overflow:hidden;
+    }
+
+    .cert-year{
+      display:block;
+      padding:15px 18px 13px;
+      background:#232323;
+      border-bottom:1px solid #3a3a3a;
+      color:var(--signal);
+      font-size:22px !important;
+      line-height:1;
+      font-weight:850;
+      letter-spacing:-.03em;
+    }
+
+    .cert-year-items{
+      display:grid;
+      gap:0;
+      padding:4px 18px 8px;
+    }
+
+    .cert-text-item{
+      display:grid !important;
+      grid-template-columns:minmax(0,1fr) auto !important;
+      align-items:center;
+      gap:18px !important;
+      padding:13px 0 !important;
+      border-bottom:1px solid #303030 !important;
+    }
+
+    .cert-text-item:last-child{
+      border-bottom:0 !important;
+    }
+
+    .cert-text-item strong{
+      font-size:13px !important;
+      line-height:1.55 !important;
+      color:#fff;
+      font-weight:700;
+    }
+
+    .cert-text-item span{
+      font-size:11px !important;
+      line-height:1.4 !important;
+      color:#9b9b9b;
+      text-align:right;
+      white-space:nowrap;
+    }
+
+    @media(max-width:820px){
+      .intro-certificates .cert-scroll,
+      .cert-scroll.cert-year-list{
+        grid-template-columns:1fr !important;
+      }
+    }
+
+    @media(max-width:520px){
+      .cert-text-item{
+        grid-template-columns:1fr !important;
+        gap:3px !important;
+      }
+
+      .cert-text-item span{
+        text-align:left !important;
+        white-space:normal;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#profile" aria-label="홈으로">GAYEON<span class="dot">.</span></a>
+
+      <nav class="nav-links" aria-label="주요 메뉴">
+        <a href="#profile">Profile</a>
+        <a href="#project-01">Work</a>
+        <a href="#archive">Archive</a>
+      </nav>
+
+      <button class="menu-btn" type="button" aria-label="모바일 메뉴 열기" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" aria-label="모바일 메뉴">
+    <a href="#profile">Profile</a>
+    <a href="#project-01">Work</a>
+    <a href="#archive">Archive</a>
+  </nav>
+
+  <main>
+    <section class="intro-page page" id="profile">
+      <div class="intro-orbit intro-orbit-a" aria-hidden="true"></div>
+      <div class="intro-orbit intro-orbit-b" aria-hidden="true"></div>
+
+      <div class="wrap">
+        <div class="intro-masthead">
+          <div class="intro-title-wrap reveal">
+            <div class="eyebrow">Visual & Digital Designer · Portfolio 2026</div>
+            <div class="page-stamp" aria-hidden="true">01</div>
+            <h1 class="intro-title">
+              Design<br>
+              <span>with clarity.</span>
+            </h1>
+            <p class="intro-lead">
+              정보를 더 명확하게 정리하고, 자연스럽게 이해할 수 있는<br>
+              <strong>시각 경험을 디자인합니다.</strong>
+            </p>
+          </div>
+
+          <aside class="identity-card reveal">
+            <div class="identity-top">
+              <span>PROFILE</span>
+              <span>SEOUL · KR</span>
+            </div>
+            <div class="intro-profile-photo">
+              <!-- 프로필 이미지 경로: portfolio_assets/profile/profile.jpg -->
+              <img src="portfolio_assets/profile/profile.jpg" alt="노가연 프로필 이미지" />
+            </div>
+            <div class="identity-name">NOH<br>GAYEON</div>
+            <div class="identity-meta">
+              <span>Design</span><span>Visual</span><span>Web</span>
+            </div>
+          </aside>
+        </div>
+
+        <div class="intro-board">
+          <article class="intro-panel intro-panel-about reveal">
+            <div class="panel-index">A</div>
+            <span class="eyebrow">About me</span>
+            <p class="intro-statement">
+              끝까지 답을 찾는 끈기와 디테일을 바탕으로,<br>
+              <em>보기 좋은 결과를 넘어<br>이해하기 쉬운 디자인</em>을<br>만드는 것을 지향합니다.
+            </p>
+
+            <div class="experience-list">
+
+              <div class="experience-row">
+                <time>2024.06 — 현재</time>
+                <div>
+                  <strong>주식회사 듀잇 (DUIT Co., Ltd.)</strong>
+                  <span>교육콘텐츠개발 · 디자인 · PM</span>
+                </div>
+              </div>
+              <div class="experience-row">
+                <time>2021.03 — 2024.03</time>
+                <div>
+                  <strong>(주)자우미디어</strong>
+                  <span>교육콘텐츠개발 · 디자인</span>
+                </div>
+              </div>
+              <div class="experience-row">
+                <time>2019.12 — 2020.02</time>
+                <div>
+                  <strong>CIELMUSIC · Internship</strong>
+                  <span>제품 콘셉트 · 포스터/팸플릿 · 촬영/영상 편집 · 홈페이지/모바일 리뉴얼</span>
+                </div>
+              </div>
+              <div class="experience-row">
+                <time>2018.12 — 2019.02</time>
+                <div>
+                  <strong>현대자동차 의왕연구소 · Internship</strong>
+                  <span>교육 운영 지원 및 구성원 관리</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="intro-panel intro-panel-education reveal">
+            <div class="panel-index">B</div>
+            <span class="eyebrow">Education</span>
+            <div class="compact-education">
+              <div>
+                <time>2020.09 — 2021.02</time>
+                <strong>웹 프론트엔드 교육과정</strong>
+                <span>코리아IT아카데미 신촌지점</span>
+              </div>
+              <div>
+                <time>2017.03 — 2021.02</time>
+                <strong>국립강릉원주대학교</strong>
+                <span>멀티미디어공학과</span>
+              </div>
+              <div>
+                <time>2016.07 — 2016.09</time>
+                <strong>청년취업아카데미</strong>
+                <span>Mobile IOT · Android · Mobile Web · UI/UX</span>
+              </div>
+              <div>
+                <time>2013.03 — 2016.02</time>
+                <strong>홍익여자디자인문화고등학교</strong>
+                <span>멀티미디어디자인과</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="intro-panel intro-panel-skills reveal">
+            <div class="panel-index">C</div>
+            <span class="eyebrow">Tools & Skills</span>
+            <div class="skill-list intro-skill-list">
+              <div class="skill-row"><span class="skill-name">Adobe Photoshop</span><span class="skill-track"><span class="skill-fill high"></span></span></div>
+              <div class="skill-row"><span class="skill-name">Illustrator</span><span class="skill-track"><span class="skill-fill high"></span></span></div>
+              <div class="skill-row"><span class="skill-name">AI Tools</span><span class="skill-track"><span class="skill-fill high"></span></span></div>
+              <div class="skill-row"><span class="skill-name">HTML / CSS</span><span class="skill-track"><span class="skill-fill mid"></span></span></div>
+              <div class="skill-row"><span class="skill-name">JavaScript</span><span class="skill-track"><span class="skill-fill mid"></span></span></div>
+            </div>
+          </article>
+        </div>
+
+        <section class="intro-certificates reveal" aria-labelledby="certificateTitle">
+          <div class="cert-title-row">
+            <div>
+              <span class="eyebrow">Certificates</span>
+              <h2 id="certificateTitle">Qualifications</h2>
+            </div>
+            <p>Qualifications organized by year</p>
+          </div>
+          <div class="cert-scroll" id="certScroll"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- PAGES 02–05: generated from four featured projects -->
+    <div id="featuredPages"></div>
+
+    <section class="section page" id="archive">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <span class="eyebrow">All Works</span>
+            <h2 class="section-title">Works by year.</h2>
+          </div>
+          <p class="section-desc"></p>
+        </div>
+        <div class="year-groups" id="yearGroups"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-panel">
+      <div class="modal-top">
+        <button class="modal-close" type="button" aria-label="프로젝트 상세 닫기">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div class="modal-img">
+            <img id="modalImage" src="" alt="" />
+          </div>
+          <div>
+            <span class="eyebrow" id="modalCategory">Project</span>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <p class="modal-desc" id="modalDesc"></p>
+            <div class="modal-spec" id="modalSpec"></div>
+            <a class="modal-live" id="modalLink" href="#" target="_blank" rel="noopener">Visit project ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /*
+      ==========================================================
+      프로젝트 추가 방법
+      ----------------------------------------------------------
+      1) 아래 projects 배열 맨 앞에 새 객체를 복사해 추가합니다.
+      2) featured: true  → Selected Works에 크게 노출
+         featured: false → Archive에만 노출
+      3) 모든 이미지는 portfolio_assets/ 아래의 상대경로로 관리합니다.
+         예: image: "portfolio_assets/works/파일명"
+      4) 같은 파일명으로 이미지를 교체하거나 image 경로만 바꾸면 바로 반영됩니다.
+      5) link가 없으면 "" 로 두면 버튼이 자동으로 숨겨집니다.
+      ==========================================================
+    */
+
+    const IMG = "portfolio_assets/legacy/";
+
+    const projects = [
+      {
+        id: "haccp-annual-2026",
+        title: "한국식품안전관리인증원",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Public Institution",
+        featured: true,
+        archive: false,
+        image: "portfolio_assets/selected01-main-food-safety-policy.png",
+        role: "Visual Design · e-Learning Content · AI Image Direction",
+        tools: "Adobe Photoshop · Illustrator · Generative AI",
+        participants: "Gayeon",
+        short: "식품안전·HACCP 교육 주제를 쉽고 직관적으로 이해할 수 있도록<br>과정별 키비주얼과 교육 화면을 제작했습니다.",
+        desc: "한국식품안전관리인증원 교육 콘텐츠를 위한 비주얼 디자인 작업입니다. 식품안전 정책, 글로벌 HACCP, 즉석섭취식품, 소독·헹굼 공정 등 서로 다른 교육 주제를 하나의 교육 경험 안에서 명확하게 전달하도록 과정별 콘셉트와 정보 위계를 설계했습니다.",
+        link: ""
+      },
+      {
+        id: "haccp-readytoeat",
+        title: "한국식품안전관리인증원 · 즉석섭취식품",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · HACCP Guide",
+        featured: true,
+        archive: false,
+        image: "portfolio_assets/selected04-ready-to-eat-main.png",
+        role: "e-Learning Visual Design · AI Image Direction",
+        tools: "Adobe Photoshop · Illustrator · Generative AI",
+        participants: "Gayeon",
+        short: "즉석섭취식품 제조·보관·위생관리 내용을 친근한 이미지와 명확한 정보 구조로 구성한<br>HACCP 교육 콘텐츠입니다.",
+        desc: "즉석섭취식품 제조 가이드라인을 교육용 콘텐츠로 시각화한 작업입니다. 정의, 섭취 상황, 원료 입고·보관, 소독·헹굼 등 핵심 내용을 장면별로 나누고, 학습자가 정보를 빠르게 이해할 수 있도록 그래픽과 강조 체계를 정리했습니다.",
+        link: ""
+      },
+      {
+        id: "hunet-annual-a",
+        title: "휴넷 AI 칼리지",
+        year: "2025-2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Annual Course",
+        featured: true,
+        archive: false,
+        image: "portfolio_assets/selected02-ai-security.png",
+        role: "Key Visual · Course Thumbnail · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator · Generative AI",
+        participants: "Gayeon",
+        short: "AI·보안·SQL·Copilot·DevOps 등 기술 교육 과정을 주제별 개성이 드러나는<br>강한 타이포그래피 중심 비주얼로 제작했습니다.",
+        desc: "휴넷 연간 교육과정 중 AI·IT 기술 분야의 과정 키비주얼 작업입니다. 교육 주제가 한눈에 읽히도록 타이포그래피의 크기와 대비를 적극적으로 활용하고, 각 기술의 아이콘과 컬러를 과정 성격에 맞게 조합했습니다.",
+        link: ""
+      },
+      {
+        id: "hunet-annual-b",
+        title: "휴넷 AI 칼리지",
+        year: "2025-2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Annual Course",
+        featured: true,
+        archive: false,
+        image: "portfolio_assets/selected03-java-vibecoding.png",
+        role: "Key Visual · Course Thumbnail · Graphic Design",
+        tools: "Adobe Photoshop · Illustrator · Generative AI",
+        participants: "Gayeon",
+        short: "업무자동화·문서작성·개발·데이터 시각화 과정의 핵심 메시지를 다양한 레이아웃과<br>타이포그래피로 시각화했습니다.",
+        desc: "휴넷 연간 교육과정의 실무형 AI·개발·문서 교육 콘텐츠 비주얼 작업입니다. 과정별 주제를 빠르게 인식할 수 있도록 레이아웃, 컬러, 사진·그래픽 사용 방식을 다르게 설계하면서도 전체 시리즈의 밀도를 유지했습니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-01",
+        title: "제조업 스마트워크 생성형 AI",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-01.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "제조업 스마트워크 생성형 AI 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-02",
+        title: "교보생명 AI 활용 역량강화",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-02.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "교보생명 AI 활용 역량강화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-03",
+        title: "AI 챔피언 Green",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-03.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI 챔피언 Green 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-04",
+        title: "AI 챔피언 Blue",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-04.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI 챔피언 Blue 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-05",
+        title: "AI 활용 컴퓨터 지식",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-05.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI 활용 컴퓨터 지식 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-06",
+        title: "Airflow 데이터 파이프라인 자동화",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-06.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "Airflow 데이터 파이프라인 자동화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-07",
+        title: "제미나이 실전 활용 전략",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-07.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "제미나이 실전 활용 전략 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-08",
+        title: "MCP 업무 자동화",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-08.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "MCP 업무 자동화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-09",
+        title: "GPT-5 실전 사용법",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-09.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "GPT-5 실전 사용법 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-10",
+        title: "파이썬 프로그래밍 with ChatGPT",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-10.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "파이썬 프로그래밍 with ChatGPT 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-11",
+        title: "AI 숏폼 & 영상 제작",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-11.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI 숏폼 & 영상 제작 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-12",
+        title: "AI 클라우드 자동화",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-12.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI 클라우드 자동화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-13",
+        title: "AI 문서 작성 업그레이드",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-13.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI 문서 작성 업그레이드 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-14",
+        title: "데이터 기초와 통계적 사고",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2026-14.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "데이터 기초와 통계적 사고 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-15",
+        title: "2026 식품안전 정책방향",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected01-main-food-safety-policy.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "2026 식품안전 정책방향 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-16",
+        title: "글로벌 HACCP 영상 가이드",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected01-global-haccp-guide.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "글로벌 HACCP 영상 가이드 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-17",
+        title: "글로벌 HACCP 영상 가이드 · 시안",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected01-global-haccp-guide-alt.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "글로벌 HACCP 영상 가이드 · 시안 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-18",
+        title: "식품사고 예방 HACCP 영상 가이드",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected01-haccp-accident-prevention.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "식품사고 예방 HACCP 영상 가이드 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-19",
+        title: "즉석섭취식품 제조 가이드라인",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected04-ready-to-eat-main.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "즉석섭취식품 제조 가이드라인 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2026-20",
+        title: "소독·헹굼 공정관리",
+        year: "2026",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected01-wash-rinse-guide.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2026 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "소독·헹굼 공정관리 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-01",
+        title: "AI가 바꾼 보안의 룰",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected02-ai-security.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI가 바꾼 보안의 룰 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-02",
+        title: "ChatGPT와 함께하는 SQL 마스터 클래스",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected02-sql-master.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "ChatGPT와 함께하는 SQL 마스터 클래스 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-03",
+        title: "Copilot 마스터 클래스",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected02-copilot-master.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "Copilot 마스터 클래스 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-04",
+        title: "Kubernetes CI/CD 자동화",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected02-kubernetes-cicd.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "Kubernetes CI/CD 자동화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-05",
+        title: "Make × ChatGPT AI 에이전트",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected02-make-chatgpt.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "Make × ChatGPT AI 에이전트 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-06",
+        title: "ChatGPT 모바일 활용",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-06.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "ChatGPT 모바일 활용 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-07",
+        title: "노코드 마케팅 업무 자동화",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-07.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "노코드 마케팅 업무 자동화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-08",
+        title: "AI 데이터 시각화 with Excel",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-08.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI 데이터 시각화 with Excel 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-09",
+        title: "리더의 생성형 AI 완전정복",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-09.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "리더의 생성형 AI 완전정복 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-10",
+        title: "리더의 조직관리 생성형 AI",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-10.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "리더의 조직관리 생성형 AI 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-11",
+        title: "Copilot 무료 버전 활용",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-11.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "Copilot 무료 버전 활용 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-12",
+        title: "Copilot Studio 업무 자동화",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-12.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "Copilot Studio 업무 자동화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-13",
+        title: "공공기관 문서 작성",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-13.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "공공기관 문서 작성 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-14",
+        title: "AI 문서 작성 노하우",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected03-report-ai.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI 문서 작성 노하우 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-15",
+        title: "생성형 AI 문서 제작",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected03-business-doc-ai.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "생성형 AI 문서 제작 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-16",
+        title: "파이썬 데이터 시각화",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected03-python-visualization.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "파이썬 데이터 시각화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-17",
+        title: "Java 바이브코딩",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/selected03-java-vibecoding.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "Java 바이브코딩 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-18",
+        title: "Github Copilot 파이썬 자동화",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-18.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "Github Copilot 파이썬 자동화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-19",
+        title: "AI Agentic Application",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-19.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI Agentic Application 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-20",
+        title: "AI Training 아카데미 · 데이터 분석",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-20.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI Training 아카데미 · 데이터 분석 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-21",
+        title: "AI Training 아카데미 · 비즈니스 문서",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-21.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI Training 아카데미 · 비즈니스 문서 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+      {
+        id: "course-2025-22",
+        title: "AI Training 아카데미 · 업무자동화",
+        year: "2025",
+        category: "elearning",
+        categoryLabel: "e-Learning · Visual Design",
+        featured: false,
+        archive: true,
+        image: "portfolio_assets/archive-2025-22.png",
+        role: "Course Key Visual · e-Learning Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "2025 교육 콘텐츠 비주얼 작업입니다.",
+        desc: "AI Training 아카데미 · 업무자동화 과정의 교육용 키비주얼 및 콘텐츠 디자인 작업입니다.",
+        link: ""
+      },
+{
+        id: "cielmusic",
+        title: "CIELMUSIC",
+        year: "2020",
+        category: "web",
+        categoryLabel: "Web Renewal · Brand",
+        featured: false,
+        image: IMG + "project-2.png",
+        role: "Web Design · Visual Design · Team Project",
+        tools: "Adobe Photoshop · Illustrator · XD · HTML/CSS",
+        participants: "Gayeon + 2",
+        short: "50–60대 중심의 사용자층을 고려해 제품을 더 쉽게 탐색하고 읽을 수 있도록 기존 악기 브랜드 웹사이트를 리뉴얼했습니다.",
+        desc: "전문 악기 제작 브랜드 CIELMUSIC의 기존 홈페이지를 리뉴얼한 프로젝트입니다.\\n\\n주 이용 고객층이 50–60대라는 점을 고려해 복잡한 화면을 정리하고, 제품이 한눈에 들어오도록 정보 위계와 가독성을 개선했습니다. 인턴 경험에서는 신상품 콘셉트, 상세 설명, 포스터·팸플릿, 촬영 및 영상 편집, 홈페이지와 모바일 리뉴얼 업무를 경험했습니다.",
+        link: "https://cielmusic.imweb.me/"
+      },
+      {
+        id: "cherimoi",
+        title: "Cheri-moi",
+        year: "2019",
+        category: "app",
+        categoryLabel: "Mobile App · UI/UX",
+        featured: false,
+        image: IMG + "project-1.png",
+        role: "UI/UX Design · App Planning · Team Project",
+        tools: "Adobe Photoshop · Illustrator · XD · Android Studio · Kotlin · Firebase",
+        participants: "Gayeon + 2",
+        short: "예비 디자이너들이 작업물을 공유하고 실시간 피드백을 나눌 수 있도록 기획한 포트폴리오 SNS 플랫폼입니다.",
+        desc: "디자인 의뢰 경험이 부족하거나 포트폴리오를 준비하는 학생들을 위한 SNS형 플랫폼입니다.\\n\\n작업물을 공유하고 실시간으로 의견을 주고받으며, 다른 사람의 작업과 피드백을 통해 시각적 판단력을 높이고 각자의 개성을 발전시키는 경험을 목표로 기획했습니다.",
+        link: ""
+      },
+      {
+        id: "poster",
+        title: "Graduation Poster",
+        year: "2016",
+        category: "graphic",
+        categoryLabel: "Graphic · Poster",
+        featured: false,
+        image: IMG + "project-14.png",
+        role: "Poster Design",
+        tools: "Adobe Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "수원여자대학교 사회실무학부 모바일미디어과 제3회 졸업전시회를 위해 제작한 그래픽 포스터입니다.",
+        desc: "수원여자대학교 사회실무학부 모바일미디어과 제3회 졸업전시회를 위해 제작한 포스터 작업입니다.",
+        link: ""
+      },
+      {
+        id: "sticky",
+        title: "Sticky Notes",
+        year: "2021",
+        category: "web",
+        categoryLabel: "Web App · Interaction",
+        featured: false,
+        image: IMG + "project-9.png",
+        role: "UI Design · Front-end",
+        tools: "React",
+        participants: "Gayeon",
+        short: "캘린더와 스티커 메모를 결합해 할 일을 날짜별로 정리하고 저장할 수 있도록 만든 웹 애플리케이션입니다.",
+        desc: "로그인 후 캘린더에서 스티커 메모 형태로 할 일을 관리하는 웹 애플리케이션입니다.\\n\\n이름과 계정 정보를 입력해 로그인하고, 오늘 날짜가 표시된 캘린더 위에 랜덤 컬러의 메모를 배치할 수 있게 구성했습니다. 작성 내용은 다시 접속해도 유지되도록 구현했습니다.",
+        link: ""
+      },
+      {
+        id: "scatter",
+        title: "Scatter",
+        year: "2016",
+        category: "graphic",
+        categoryLabel: "Graphic · Photoshop",
+        featured: false,
+        image: IMG + "project-13.png",
+        role: "Graphic Design",
+        tools: "Adobe Photoshop",
+        participants: "Gayeon",
+        short: "Photoshop 기반 그래픽 실험 작업입니다.",
+        desc: "Photoshop을 활용해 제작한 그래픽 작업입니다.",
+        link: ""
+      },
+      {
+        id: "child-dog",
+        title: "Child & Dog",
+        year: "2016",
+        category: "graphic",
+        categoryLabel: "Graphic · Photoshop",
+        featured: false,
+        image: IMG + "project-12.png",
+        role: "Graphic Design",
+        tools: "Adobe Photoshop",
+        participants: "Gayeon",
+        short: "Photoshop 기반 이미지 합성 및 그래픽 작업입니다.",
+        desc: "Photoshop을 활용해 제작한 이미지 합성 및 그래픽 작업입니다.",
+        link: ""
+      },
+      {
+        id: "light1",
+        title: "Light 01",
+        year: "2016",
+        category: "graphic",
+        categoryLabel: "Graphic · Photoshop",
+        featured: false,
+        image: IMG + "project-10.png",
+        role: "Graphic Design",
+        tools: "Adobe Photoshop",
+        participants: "Gayeon",
+        short: "빛과 이미지를 활용한 Photoshop 그래픽 작업입니다.",
+        desc: "Photoshop을 활용해 제작한 그래픽 작업입니다.",
+        link: ""
+      },
+      {
+        id: "light2",
+        title: "Light 02",
+        year: "2016",
+        category: "graphic",
+        categoryLabel: "Graphic · Photoshop",
+        featured: false,
+        image: IMG + "project-11.png",
+        role: "Graphic Design",
+        tools: "Adobe Photoshop",
+        participants: "Gayeon",
+        short: "빛과 이미지를 활용한 Photoshop 그래픽 작업입니다.",
+        desc: "Photoshop을 활용해 제작한 그래픽 작업입니다.",
+        link: ""
+      },
+      {
+        id: "zoolung",
+        title: "Zoolung Main",
+        year: "2020",
+        category: "web",
+        categoryLabel: "Web · Publishing",
+        featured: false,
+        image: IMG + "project-3_1.png",
+        role: "Web Publishing",
+        tools: "HTML · CSS · Photoshop",
+        participants: "Gayeon",
+        short: "주렁주렁 메인 페이지의 화면 구성과 인터랙션을 재현한 웹 퍼블리싱 작업입니다.",
+        desc: "주렁주렁 홈페이지의 메인 화면을 HTML과 CSS로 재현했습니다. 상단 고정 메뉴, hover 효과, 영상 등 기존 페이지의 화면 구성과 동작을 구현하는 데 초점을 둔 작업입니다.",
+        link: ""
+      },
+      {
+        id: "nintendo",
+        title: "Nintendo Main",
+        year: "2020",
+        category: "web",
+        categoryLabel: "Web · Publishing",
+        featured: false,
+        image: IMG + "project-3_2.png",
+        role: "Web Publishing",
+        tools: "HTML · CSS",
+        participants: "Gayeon",
+        short: "Nintendo 메인 페이지의 레이아웃과 주요 시각 요소를 재현한 퍼블리싱 작업입니다.",
+        desc: "Nintendo 홈페이지의 메인 화면을 HTML과 CSS로 재현한 웹 퍼블리싱 작업입니다. 메뉴바, 상단 비주얼, 표 등 주요 화면 요소를 구현했습니다.",
+        link: ""
+      },
+      {
+        id: "todo",
+        title: "Todo List",
+        year: "2020",
+        category: "web",
+        categoryLabel: "Web App",
+        featured: false,
+        image: IMG + "project-4.png",
+        role: "Front-end",
+        tools: "HTML · CSS · JavaScript",
+        participants: "Gayeon",
+        short: "사용자 이름과 할 일을 입력하고 목록을 관리할 수 있도록 만든 간단한 웹 앱입니다.",
+        desc: "현재 시각과 할 일 목록을 보여주는 웹 애플리케이션입니다. 사용자 이름을 입력하면 인사말을 표시하고, 할 일을 추가하거나 삭제할 수 있도록 구현했습니다.",
+        link: ""
+      },
+      {
+        id: "weather",
+        title: "Weather",
+        year: "2020",
+        category: "web",
+        categoryLabel: "Web App",
+        featured: false,
+        image: IMG + "project-5.png",
+        role: "Front-end",
+        tools: "HTML · CSS · JavaScript",
+        participants: "Gayeon",
+        short: "도시명을 입력해 최고·최저·체감온도 등 날씨 정보를 확인하도록 만든 웹 앱입니다.",
+        desc: "도시명을 입력하면 해당 도시의 날씨 정보를 확인할 수 있도록 만든 웹 애플리케이션입니다. 최고·최저온도와 체감온도를 보여주도록 구성했습니다.",
+        link: ""
+      },
+      {
+        id: "lotto",
+        title: "Lotto",
+        year: "2020",
+        category: "web",
+        categoryLabel: "Web App",
+        featured: false,
+        image: IMG + "project-6.png",
+        role: "Front-end",
+        tools: "HTML · CSS · JavaScript",
+        participants: "Gayeon",
+        short: "버튼을 눌러 랜덤 번호를 생성하고 초기화할 수 있도록 만든 JavaScript 연습 프로젝트입니다.",
+        desc: "생성 버튼을 누르면 랜덤 번호를 추출해 목록으로 표시하고, 초기화 버튼으로 생성 결과를 지울 수 있도록 만든 JavaScript 기반 웹 프로젝트입니다.",
+        link: ""
+      },
+      {
+        id: "uiguide",
+        title: "UI Guide Web",
+        year: "2020",
+        category: "web",
+        categoryLabel: "Web · UI Guide",
+        featured: false,
+        image: IMG + "project-15.png",
+        role: "UI Design · Web Publishing",
+        tools: "HTML · CSS · Photoshop · Illustrator",
+        participants: "Gayeon",
+        short: "사이드 메뉴와 검색 UI를 통해 툴 설명 및 오류 해결 정보를 탐색하도록 구성한 웹 프로젝트입니다.",
+        desc: "좌측 아이콘 메뉴를 선택해 관련 기능 설명을 확인하고, 검색 아이콘을 통해 자주 발생하는 오류와 해결 방법을 팝업 형태로 확인하도록 구성했습니다.",
+        link: ""
+      },
+      {
+        id: "dogweb",
+        title: "Dog Web",
+        year: "2020",
+        category: "web",
+        categoryLabel: "Web App",
+        featured: false,
+        image: IMG + "project-7.png",
+        role: "Web Development",
+        tools: "Node.js · MongoDB · Mongoose",
+        participants: "Gayeon",
+        short: "강아지 정보를 생성·조회·수정·삭제·검색할 수 있도록 만든 CRUD 웹 프로젝트입니다.",
+        desc: "강아지 이름, 종, 생년월일, 메모를 생성하고 조회·수정·삭제·검색할 수 있도록 구성한 CRUD 웹 프로젝트입니다.",
+        link: ""
+      },
+      {
+        id: "bestvideo",
+        title: "Best Video",
+        year: "2020",
+        category: "web",
+        categoryLabel: "Web App",
+        featured: false,
+        image: IMG + "project-8.png",
+        role: "UI · Front-end",
+        tools: "React",
+        participants: "Gayeon",
+        short: "로그인 검증과 고정 사이드 영역, 영상 피드를 결합한 React 기반 웹 프로젝트입니다.",
+        desc: "이메일 및 비밀번호 형식 검증을 포함한 로그인 화면과, 로그인 후 고정된 좌측 영역 및 스크롤 가능한 영상 피드를 구성한 React 프로젝트입니다.",
+        link: ""
+      }
+    ];
+
+    const featuredGalleries = {
+      "haccp-annual-2026": ["portfolio_assets/selected01-global-haccp-guide.png", "portfolio_assets/selected01-global-haccp-guide-alt.png", "portfolio_assets/selected01-haccp-accident-prevention.png", "portfolio_assets/selected01-ready-to-eat-guide.png", "portfolio_assets/selected01-wash-rinse-guide.png"],
+      "hunet-annual-a": ["portfolio_assets/selected02-sql-master.png", "portfolio_assets/selected02-copilot-master.png", "portfolio_assets/selected02-kubernetes-cicd.png", "portfolio_assets/selected02-make-chatgpt.png", "portfolio_assets/placeholders/selected02-detail-05.png"],
+      "hunet-annual-b": ["portfolio_assets/selected03-report-ai.png", "portfolio_assets/selected03-business-doc-ai.png", "portfolio_assets/selected03-python-visualization.png", "portfolio_assets/placeholders/selected03-detail-04.png", "portfolio_assets/placeholders/selected03-detail-05.png"],
+      "haccp-readytoeat": ["portfolio_assets/selected04-ready-to-eat-04.png", "portfolio_assets/selected04-ready-to-eat-05.png", "portfolio_assets/selected04-ready-to-eat-09.png", "portfolio_assets/selected04-ready-to-eat-11.png", "portfolio_assets/selected04-ready-to-eat-16.png"]
+    };
+
+    const certificates = [
+      {name:"컴퓨터그래픽스운용기능사",date:"2021.10"},
+      {name:"멀티미디어콘텐츠제작전문가",date:"2020.09 · 필기 합격"},
+      {name:"인터넷정보관리사 2급",date:"2016.11"},
+      {name:"시큐어코딩전문가",date:"2016.08"},
+      {name:"E-Test 엑셀",date:"2016.06"},
+      {name:"모바일앱개발전문가 2급",date:"2016.05"},
+      {name:"디지털정보활용능력 · 프레젠테이션",date:"2016.05"},
+      {name:"디지털정보활용능력 · 멀티미디어제작",date:"2016.05"},
+      {name:"E-Test 워드",date:"2016.04"},
+      {name:"GTQ 1급",date:"2013.09"}
+    ];
+
+    // PAGES 02–05
+    const featuredPages = document.getElementById("featuredPages");
+    const featured = projects.filter(p => p.featured);
+
+    featured.forEach((p,index) => {
+      const gallery = [...(featuredGalleries[p.id] || [])];
+      while(gallery.length < 5) gallery.push(null);
+
+      const section = document.createElement("section");
+      section.className = "project-page page";
+      section.id = `project-0${index + 1}`;
+      section.dataset.page = String(index + 2).padStart(2,"0");
+      section.innerHTML = `
+        <div class="wrap project-page-grid">
+          <div class="project-main reveal">
+            <img src="${p.image}" alt="${p.title} 대표 이미지" loading="${index === 0 ? "eager" : "lazy"}">
+          </div>
+          <div class="project-side reveal">
+            <div class="project-number">PAGE ${String(index + 2).padStart(2,"0")} · SELECTED WORK</div>
+            <div class="mini-gallery" aria-label="${p.title} 상세 이미지">
+              ${gallery.slice(0,4).map((src,i) => src
+                ? `<div class="mini-item"><img src="${src}" alt="${p.title} 상세 이미지 ${i+1}" loading="lazy"></div>`
+                : `<div class="mini-item"><div class="mini-placeholder">Image ${String(i+1).padStart(2,"0")}<br>추가</div></div>`
+              ).join("")}
+            </div>
+            <div class="project-copy">
+              <h2 class="project-title">${p.title}</h2>
+              <p class="project-role">${p.role} · ${p.year}</p>
+              <p class="project-blurb">${p.short}</p>
+              <div class="tags">${p.tools.split(" · ").slice(0,5).map(t => `<span class="tag">${t}</span>`).join("")}</div>
+              <button class="open-link" type="button" data-project="${p.id}">View project <span class="arrow">↗</span></button>
+            </div>
+          </div>
+        </div>`;
+      featuredPages.appendChild(section);
+    });
+
+    // Qualifications: text-only, grouped by year.
+    const certScroll = document.getElementById("certScroll");
+    certScroll.classList.add("cert-year-list");
+
+    const certGroups = certificates.reduce((groups, cert) => {
+      const year = cert.date.match(/\d{4}/)?.[0] || "Other";
+      if(!groups[year]) groups[year] = [];
+      groups[year].push(cert);
+      return groups;
+    }, {});
+
+    Object.keys(certGroups)
+      .sort((a,b) => Number(b) - Number(a))
+      .forEach(year => {
+        const group = document.createElement("section");
+        group.className = "cert-year-group";
+        group.innerHTML = `
+          <div class="cert-year">${year}</div>
+          <div class="cert-year-items">
+            ${certGroups[year].map(cert => `
+              <div class="cert-text-item">
+                <strong>${cert.name}</strong>
+                <span>${cert.date}</span>
+              </div>
+            `).join("")}
+          </div>
+        `;
+        certScroll.appendChild(group);
+      });
+
+
+    // PAGE 07: all projects grouped by year in a non-scrolling responsive overview grid.
+    const yearGroups = document.getElementById("yearGroups");
+    const archiveProjects = projects.filter(p => p.archive !== false);
+    const years = [...new Set(archiveProjects.map(p => p.year))].sort((a,b) => Number(b) - Number(a));
+    years.forEach(year => {
+      const items = archiveProjects.filter(p => p.year === year);
+      const block = document.createElement("div");
+      block.className = "year-block reveal";
+      block.innerHTML = `
+        <div class="year-head">
+          <div class="year-label">${year}</div>
+          <div class="year-count">${items.length} PROJECT${items.length > 1 ? "S" : ""}</div>
+        </div>
+        <div class="year-row">
+          ${items.map(p => `
+            <article class="year-card" tabindex="0" role="button" data-project="${p.id}" aria-label="${p.title} 프로젝트 상세 보기">
+              <div class="year-card-image"><img src="${p.image}" alt="${p.title} 프로젝트 이미지" loading="lazy"></div>
+              <div class="year-card-info"><span class="year-card-title">${p.title}</span><span class="year-card-cat">${p.categoryLabel}</span></div>
+            </article>`).join("")}
+        </div>`;
+      yearGroups.appendChild(block);
+    });
+
+    // Modal
+    const modal = document.getElementById("projectModal");
+    const closeBtn = modal.querySelector(".modal-close");
+    const modalImage = document.getElementById("modalImage");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalCategory = document.getElementById("modalCategory");
+    const modalDesc = document.getElementById("modalDesc");
+    const modalSpec = document.getElementById("modalSpec");
+    const modalLink = document.getElementById("modalLink");
+    let lastFocused = null;
+
+    function openProject(id){
+      const p = projects.find(item => item.id === id);
+      if(!p) return;
+
+      lastFocused = document.activeElement;
+      modalImage.src = p.image;
+      modalImage.alt = p.title + " 프로젝트 이미지";
+      modalTitle.textContent = p.title;
+      modalCategory.textContent = p.categoryLabel;
+      modalDesc.textContent = p.desc;
+      modalSpec.innerHTML = `
+        <div class="spec-row"><span>Year</span><strong>${p.year}</strong></div>
+        <div class="spec-row"><span>Role</span><strong>${p.role}</strong></div>
+        <div class="spec-row"><span>Tools</span><strong>${p.tools}</strong></div>
+        <div class="spec-row"><span>Team</span><strong>${p.participants}</strong></div>
+      `;
+
+      if(p.link){
+        modalLink.href = p.link;
+        modalLink.style.display = "inline-flex";
+      }else{
+        modalLink.style.display = "none";
+      }
+
+      modal.classList.add("active");
+      document.body.classList.add("modal-open");
+      closeBtn.focus();
+    }
+
+    function closeProject(){
+      modal.classList.remove("active");
+      document.body.classList.remove("modal-open");
+      if(lastFocused) lastFocused.focus();
+    }
+
+    document.addEventListener("click", e => {
+      const card = e.target.closest("[data-project]");
+      if(card) openProject(card.dataset.project);
+
+      if(e.target === modal || e.target === closeBtn) closeProject();
+    });
+
+    document.addEventListener("keydown", e => {
+      if((e.key === "Enter" || e.key === " ") && e.target.matches("[data-project]")){
+        e.preventDefault();
+        openProject(e.target.dataset.project);
+      }
+      if(e.key === "Escape" && modal.classList.contains("active")) closeProject();
+    });
+
+    // Mobile menu
+    const menuBtn = document.querySelector(".menu-btn");
+    const mobileNav = document.querySelector(".mobile-nav");
+
+    menuBtn.addEventListener("click", () => {
+      const isOpen = mobileNav.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    mobileNav.querySelectorAll("a").forEach(a => {
+      a.addEventListener("click", () => {
+        mobileNav.classList.remove("open");
+        menuBtn.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add("show");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .12 });
+
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
