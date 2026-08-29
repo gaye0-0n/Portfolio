@@ -1,0 +1,27 @@
+포트폴리오 이미지 경로 안내
+
+모든 포트폴리오 이미지는 HTML과 같은 폴더 안의 portfolio_assets/ 경로를 사용합니다.
+
+1. 프로필
+   portfolio_assets/profile/profile.jpg
+
+2. 대표작업물 / 2025·2026 작업물
+   HTML의 projects 배열에서 image: "portfolio_assets/파일명.png" 수정
+   또는 같은 파일명으로 이미지를 교체
+
+3. 대표작업물 상세 이미지
+   HTML의 featuredGalleries 객체에서 경로 수정
+
+4. 자격증
+   portfolio_assets/certificates/certificate-01.png ~ certificate-10.png
+   같은 파일명으로 교체하면 자동 반영
+
+5. 기존 2016~2020 작업물
+   portfolio_assets/legacy/project-*.png
+   현재는 교체용 placeholder 이미지가 들어 있습니다.
+   실제 이미지를 같은 파일명으로 덮어쓰면 자동 반영됩니다.
+
+주의:
+- 경로는 HTML 파일 기준 상대경로입니다.
+- 폴더명/파일명 대소문자를 맞춰주세요.
+- GitHub Pages에 올릴 때 HTML과 portfolio_assets 폴더를 함께 업로드하세요.
